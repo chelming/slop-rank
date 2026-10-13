@@ -1,0 +1,328 @@
+:root {
+  --red: #e2231a;
+  --blue: #1f5fbf;
+  --ink: #23202a;
+  --muted: #6c6676;
+  --bg: #fdf7f4;
+  --card: #ffffff;
+  --line: #eadfe0;
+  --shadow: 0 2px 10px rgba(35, 32, 42, .08);
+  --gold: #d8a419;
+  /* Set once from JS so 100vh doesn't include mobile Safari's collapsing bars. */
+  --vh: 1vh;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #f2eef2;
+    --muted: #a49eaa;
+    --bg: #17151b;
+    --card: #221f28;
+    --line: #322d38;
+    --shadow: 0 2px 10px rgba(0, 0, 0, .35);
+    --red: #ff5148;
+    --blue: #6fa4ff;
+    --gold: #e8bd44;
+  }
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+/* The UA's [hidden] rule loses to any author display declaration, and both
+   .view and .arena set one — without this, hidden sections still render. */
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  display: flex;
+  flex-direction: column;
+  /* A definite height, not min-height: the vote view distributes leftover space
+     down a flex chain, and with an auto-height body the cards size to their
+     600px artwork instead and push the buttons off-screen. */
+  height: 100vh;
+  height: calc(var(--vh) * 100);
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior-y: contain;
+}
+
+/* ---------- top bar ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: max(5px, env(safe-area-inset-top)) 10px 5px;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.topbar h1 {
+  font-size: 15px;
+  margin: 0 auto 0 0;
+  letter-spacing: -.02em;
+  color: var(--red);
+  font-weight: 800;
+}
+
+.chip, select, button { font: inherit; color: inherit; }
+
+.chip {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  max-width: 34vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+select {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 4px 6px;
+  font-size: 13px;
+  max-width: 40vw;
+}
+
+main { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.view { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+
+/* ---------- progress ---------- */
+.progress {
+  height: 4px;
+  background: var(--line);
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--blue), var(--red));
+  transition: width .3s ease;
+}
+
+.progress-text {
+  margin: 4px 12px 0;
+  font-size: 11.5px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ---------- the pair ---------- */
+.arena {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 5px;
+  padding: 6px 10px;
+}
+
+.card {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: 6px;
+  background: var(--card);
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform .12s ease, border-color .12s ease, opacity .15s ease;
+}
+
+.card img {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.card .name {
+  font-weight: 700;
+  font-size: clamp(14px, 4vw, 19px);
+  text-align: center;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.card .cat { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+
+.card:active { transform: scale(.97); }
+.card.win { border-color: var(--red); transform: scale(1.02); }
+.card.lose { opacity: .25; transform: scale(.94); }
+.arena.busy { pointer-events: none; }
+
+.vs {
+  align-self: center;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--muted);
+}
+
+/* Landscape and desktop: side by side, since there's width to spare. */
+@media (min-aspect-ratio: 1/1) and (min-width: 560px) {
+  .arena { flex-direction: row; align-items: stretch; }
+  .vs { align-self: center; }
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  padding: 0 10px 8px;
+}
+
+.ghost {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ghost:active { background: var(--line); }
+.ghost:disabled { opacity: .4; }
+.ghost.danger { color: var(--red); flex: 0 0 auto; }
+
+.primary {
+  width: 100%;
+  padding: 13px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--red);
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.empty { padding: 32px 24px; text-align: center; color: var(--muted); }
+
+/* ---------- ranking ---------- */
+.rank-head {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 12px;
+}
+
+.rank-head select { flex: 1; max-width: none; }
+
+.rank-note {
+  margin: -4px 12px 6px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.rank-list li.divider {
+  display: block;
+  border: 0;
+  padding: 18px 0 6px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--muted);
+}
+
+.rank-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 12px calc(16px + env(safe-area-inset-bottom));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.rank-list li {
+  display: grid;
+  grid-template-columns: 30px 44px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.rank-list .pos { font-weight: 800; font-size: 15px; color: var(--muted); text-align: right; }
+.rank-list li:nth-child(1) .pos { color: var(--gold); font-size: 18px; }
+.rank-list li:nth-child(2) .pos,
+.rank-list li:nth-child(3) .pos { color: var(--blue); }
+.rank-list img { width: 44px; height: 44px; object-fit: contain; }
+.rank-list .who { min-width: 0; }
+.rank-list .who b { display: block; font-size: 14.5px; font-weight: 650; }
+.rank-list .meter { display: block; height: 4px; background: var(--line); border-radius: 2px; margin-top: 4px; overflow: hidden; }
+.rank-list .meter i { display: block; height: 100%; background: var(--blue); }
+.rank-list .rec { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rank-list li.unrated { opacity: .5; }
+
+/* ---------- tabs ---------- */
+.tabs {
+  display: flex;
+  border-top: 1px solid var(--line);
+  background: var(--card);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.tabs button {
+  flex: 1;
+  padding: 9px 0;
+  border: 0;
+  background: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.tabs button.on { color: var(--red); box-shadow: inset 0 2px 0 var(--red); }
+
+/* ---------- dialog ---------- */
+dialog {
+  border: 0;
+  border-radius: 18px;
+  padding: 20px;
+  max-width: 340px;
+  width: calc(100% - 32px);
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .3);
+}
+
+dialog::backdrop { background: rgba(0, 0, 0, .5); }
+dialog h2 { margin: 0 0 6px; font-size: 19px; }
+dialog p { margin: 0 0 12px; font-size: 13.5px; color: var(--muted); }
+
+dialog input {
+  width: 100%;
+  padding: 12px;
+  font: inherit;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.who-existing { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.who-existing button { border: 1px solid var(--line); background: var(--bg); border-radius: 999px; padding: 5px 11px; font-size: 13px; cursor: pointer; }

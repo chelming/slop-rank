@@ -1,0 +1,17 @@
+services:
+  ranker:
+    build: .
+    # image: ranker            # or build once and reference the tag
+    container_name: ranker
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      CONTENT_DIR: /content    # defaults shown; change only if you move the mounts
+      DATA_DIR: /data
+    volumes:
+      # Your items.json + img/. Omit to run the built-in sample list.
+      - ./content:/content:ro
+      # SQLite votes. Must be writable by uid/gid 1000 (the container user):
+      #   mkdir -p data && sudo chown 1000:1000 data
+      - ./data:/data

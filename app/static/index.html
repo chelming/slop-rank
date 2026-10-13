@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#e2231a">
+<title>Ranker</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:,">
+<link rel="apple-touch-icon" href="data:,">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+</head>
+<body>
+
+<header class="topbar">
+  <h1 id="title">Ranker</h1>
+  <button id="voter-chip" class="chip" type="button">…</button>
+  <select id="category" aria-label="Category"></select>
+</header>
+
+<main>
+  <section id="view-vote" class="view">
+    <div class="progress" aria-hidden="true"><span id="bar"></span></div>
+    <p class="progress-text" id="progress-text">Loading…</p>
+
+    <div class="arena" id="arena">
+      <button class="card" id="card-a" type="button">
+        <img alt="" id="img-a" decoding="async">
+        <span class="name" id="name-a"></span>
+        <span class="cat" id="cat-a"></span>
+      </button>
+      <div class="vs">or</div>
+      <button class="card" id="card-b" type="button">
+        <img alt="" id="img-b" decoding="async">
+        <span class="name" id="name-b"></span>
+        <span class="cat" id="cat-b"></span>
+      </button>
+    </div>
+
+    <p class="empty" id="vote-empty" hidden></p>
+
+    <div class="actions">
+      <button id="btn-undo" class="ghost" type="button">Undo last pick</button>
+    </div>
+  </section>
+
+  <section id="view-rank" class="view" hidden>
+    <div class="rank-head">
+      <select id="rank-voter" aria-label="Whose ranking"></select>
+      <button id="btn-reset" class="ghost danger" type="button">Reset mine</button>
+    </div>
+    <p class="rank-note" id="rank-note"></p>
+    <ol id="rank-list" class="rank-list"></ol>
+    <p class="empty" id="rank-empty" hidden>No votes yet — go pick some favorites.</p>
+  </section>
+</main>
+
+<nav class="tabs">
+  <button data-view="vote" class="on" type="button">Vote</button>
+  <button data-view="rank" type="button">Ranking</button>
+</nav>
+
+<dialog id="who">
+  <form method="dialog">
+    <h2>Who's ranking?</h2>
+    <p>Everyone gets their own list. Use the same name next time to keep going.</p>
+    <input id="who-name" maxlength="40" autocomplete="off" placeholder="Your name" required>
+    <div id="who-existing" class="who-existing"></div>
+    <button value="ok" class="primary">Start ranking</button>
+  </form>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>

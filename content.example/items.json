@@ -1,0 +1,16 @@
+{
+  "title": "Pizza Toppings",
+  "noun": "topping",
+  "nouns": "toppings",
+  "color": "#c0392b",
+  "items": [
+    { "name": "Pepperoni", "category": "Meat" },
+    { "name": "Sausage", "category": "Meat" },
+    { "name": "Bacon", "category": "Meat" },
+    { "name": "Mushrooms", "category": "Veg" },
+    { "name": "Green Peppers", "category": "Veg" },
+    { "name": "Black Olives", "category": "Veg" },
+    { "name": "Pineapple", "category": "Veg" },
+    { "name": "Extra Cheese", "category": "Cheese" }
+  ]
+}
